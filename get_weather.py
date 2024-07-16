@@ -1,4 +1,5 @@
 import requests, json
+from deep_translator import GoogleTranslator
 
 
 def get_weather(city_name):
@@ -30,9 +31,10 @@ def get_weather(city_name):
     current_humidity = y["humidity"]
     weather_description = z[0]["description"]
     weather_overview = j["weather_overview"]
-    combine_response = print(
-        f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{weather_overview}"
-    )
+
+    translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
+
+    combine_response = print(f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{translated}")
 
     return
 
@@ -43,3 +45,5 @@ def get_weather(city_name):
     print("Atmospheric pressure (in hPa unit) = " + str(current_pressure))
     print(weather_overview)
 """
+
+get_weather("grodno")

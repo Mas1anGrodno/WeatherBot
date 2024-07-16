@@ -5,6 +5,7 @@ import requests, json
 import app.keyboards as kb
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from deep_translator import GoogleTranslator
 
 # from get_weather import get_weather
 
@@ -57,8 +58,9 @@ async def set_city_name(message: Message, state: FSMContext):
     current_humidity = y["humidity"]
     weather_description = z[0]["description"]
     weather_overview = j["weather_overview"]
-    combine_response = print
+    
+    translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
 
     await message.answer(
-        f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{weather_overview}"
+        f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{translated}"
     )
