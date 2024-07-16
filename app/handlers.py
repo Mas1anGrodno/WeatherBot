@@ -2,43 +2,28 @@ from aiogram import F, Router, types
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command
 import requests, json
+import app.keyboards as kb
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-import requests, json
-import app.keyboards as kb
 
 # from get_weather import get_weather
 
 router = Router()
 
 
-class Register(StatesGroup):
-    city_name = State()
+class City(StatesGroup):
+    name = State()
 
 
 @router.message(CommandStart())
 async def start_command(message: types.Message):
-    # await message.answer("answer - HI ! ", reply_markup=kb.main)
-    await message.reply("Привет! Напиши мне название города и я пришлю сводку погоды", reply_markup=kb.main)
+    await message.answer("Привет! это тестовый бот OpenWeatherMap ", reply_markup=kb.main)
 
 
-@router.message(Command("help"))
-async def help(message: Message):
-    await message.answer("вызов помощи")
-
-
-@router.message(Command("set_city"))
-async def weather(message: Message, state: FSMContext):
-    await state.set_state(Register.city_name)
-    await message.answer("Введите город")
-    # await message.answer("выбери период", reply_markup=kb.forecast)
-
-
-@router.message(Register.city_name)
-async def register_name(message: Message, state: FSMContext):
-    await state.update_data(city_name=message.text)
-    data = await state.get_data()
-    await message.answer(f"город сохранен - {data["city_name"]}")
+@router.message(Command("city"))
+async def city(message: Message, state: FSMContext):
+    await state.set_state(Register.name)
+    await message.answer("Введите ваше имя")
 
 
 @router.message(Command("get_weather"))
@@ -48,7 +33,7 @@ async def get_weather(message: Message):
 
     # city_name = input("Enter city name : ")
 
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={Register.city_name},BY&limit=1&appid={api_key}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q=Grodno,BY&limit=1&appid={api_key}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
@@ -76,11 +61,3 @@ async def get_weather(message: Message):
     await message.answer(
         f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{weather_overview}"
     )
-    # await message.answer("погода говно")
-
-
-"""@router.callback_query(F.data == "today")
-async def today(callback: CallbackQuery):
-    await callback.answer("сегодня")
-    await callback.message.answer("прогноз на сегодня")
-"""

@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 
 main = ReplyKeyboardMarkup(
     # keyboard=[[KeyboardButton(text="гродно")], [KeyboardButton(text="Привет")], [KeyboardButton(text="/help"), KeyboardButton(text="/weather")]],
-    keyboard=[[KeyboardButton(text="/get_weather")], [KeyboardButton(text="/help"), KeyboardButton(text="/set_city")]],
+    keyboard=[[KeyboardButton(text="/get_weather"), KeyboardButton(text="/start")]],
     resize_keyboard=True,
     input_field_placeholder="жми кнопку",
 )
