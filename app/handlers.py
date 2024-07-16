@@ -22,18 +22,19 @@ async def start_command(message: types.Message):
 
 @router.message(Command("city"))
 async def city(message: Message, state: FSMContext):
-    await state.set_state(Register.name)
-    await message.answer("Введите ваше имя")
+    await state.set_state(City.name)
+    await message.answer("Введите город")
 
 
-@router.message(Command("get_weather"))
-async def get_weather(message: Message):
-    # Enter your API key here
+@router.message(City.name)
+async def set_city_name(message: Message, state: FSMContext):
+    await state.update_data(name=message.text)
+    data = await state.get_data()
+    await message.answer(f"выбран город: {data["name"]}")
+    
     api_key = "3efb07367c44620fb67d99e607fca049"
 
-    # city_name = input("Enter city name : ")
-
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q=Grodno,BY&limit=1&appid={api_key}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={data["name"]},BY&limit=1&appid={api_key}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
