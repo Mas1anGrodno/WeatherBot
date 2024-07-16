@@ -13,7 +13,7 @@ router = Router()
 
 class City(StatesGroup):
     name = State()
-
+    
 
 @router.message(CommandStart())
 async def start_command(message: types.Message):
