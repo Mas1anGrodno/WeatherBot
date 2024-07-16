@@ -7,10 +7,4 @@ main = ReplyKeyboardMarkup(
     input_field_placeholder="жми кнопку",
 )
 
-# forecast = InlineKeyboardMarkup(
-#    inline_keyboard=[
-#        [InlineKeyboardButton(text="today", callback_data="today")],
-#        [InlineKeyboardButton(text="3 days", callback_data="three_dys")],
-#        [InlineKeyboardButton(text="7 days", callback_data="seven_dys")],
-#    ]
-# )
+# chhose_country = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Беларусь", callback_data="by")], [InlineKeyboardButton(text="Россия", callback_data="ru")]])
