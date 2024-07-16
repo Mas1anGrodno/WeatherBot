@@ -14,15 +14,22 @@ router = Router()
 
 class City(StatesGroup):
     name = State()
+    country = State()
     
 
 @router.message(CommandStart())
 async def start_command(message: types.Message):
     await message.answer("Привет! это тестовый бот OpenWeatherMap ", reply_markup=kb.main)
 
-
 @router.message(Command("city"))
-async def city(message: Message, state: FSMContext):
+async def get_country(message: Message, state: FSMContext):
+    await state.set_state(City.country)
+    await message.answer("Введите страну страну")
+
+
+@router.message(City.country)
+async def get_city(message: Message, state: FSMContext):
+    await state.update_data(country=message.text)
     await state.set_state(City.name)
     await message.answer("Введите город")
 
@@ -35,7 +42,7 @@ async def set_city_name(message: Message, state: FSMContext):
     
     api_key = "3efb07367c44620fb67d99e607fca049"
 
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={data["name"]},BY&limit=1&appid={api_key}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={data["name"]},{data["country"]}&limit=1&appid={api_key}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
