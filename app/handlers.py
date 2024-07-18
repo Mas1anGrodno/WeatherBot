@@ -24,7 +24,7 @@ async def start_command(message: types.Message):
 @router.message(Command("city"))
 async def get_country(message: Message, state: FSMContext):
     await state.set_state(City.country)
-    await message.answer("Введите страну страну")
+    await message.answer("Введите страну")
 
 
 @router.message(City.country)
