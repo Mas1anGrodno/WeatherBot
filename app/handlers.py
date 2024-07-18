@@ -59,8 +59,10 @@ async def send_forecast(message: Message, state: FSMContext):
         data = await state.get_data()
         if data["forecast"] == "Краткий":
             await message.answer(get_weather(data["name"], data["country"]))
+            await message.answer("Ищем еще что-нибудь ?", reply_markup=kb.main)
         else:
             await message.answer(get_weather_overview(data["name"], data["country"]))
-        await message.answer("Посмотрим погоду еще где-нибудь ?", reply_markup=kb.main)
+            await message.answer("Ищем еще что-нибудь ?", reply_markup=kb.main)
+
     except IndexError:
-        await message.answer("Такой город не найден")
+        await message.answer("Такой город не найден", reply_markup=kb.main)
