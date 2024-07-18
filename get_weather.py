@@ -28,15 +28,6 @@ def get_weather(city_name, country_name):
     current_pressure = y["pressure"]
     current_humidity = y["humidity"]
 
-    # Пока отключили overview и вынесли в отдельную функцию.
-
-    # overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={api_key}"
-    # overview = requests.get(overview_url)
-    # j = overview.json()
-    # weather_overview = j["weather_overview"]
-    # translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
-
-    # return f" В {city_name_from_json} сейчас - {weather_description}\nТемпература воздуха - {current_temperature} °C\nДавление - {current_pressure} гПа\nВлажность - {current_humidity} % \n\n{translated}"
     return f" В {city_name_from_json} сейчас - {weather_description}\nТемпература воздуха - {current_temperature} °C\nДавление - {current_pressure} гПа\nВлажность - {current_humidity} %"
 
 
@@ -57,4 +48,4 @@ def get_weather_overview(city_name, country_name):
 
     translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
 
-    return f" В {city_name_from_json} сейчас -\n{translated}"
+    return f"{translated}"
