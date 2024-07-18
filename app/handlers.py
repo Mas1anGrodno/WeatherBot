@@ -29,17 +29,12 @@ async def get_country(message: Message, state: FSMContext):
     await message.answer("Выбери страну", reply_markup=kb.chose_country)
 
 
-@router.callback_query(City.country, F.data == "by")
-async def set_country_by(callback: CallbackQuery, state: FSMContext):
-    await callback.answer("Вы выбрали Беларусь")
-    await state.update_data(country=callback.data)
-    await state.set_state(City.name)
-    await callback.message.answer("Введите город")
-
-
-@router.callback_query(City.country, F.data == "ru")
-async def set_country_ru(callback: CallbackQuery, state: FSMContext):
-    await callback.answer("Вы выбрали Россия")
+@router.callback_query(City.country)
+async def set_country(callback: CallbackQuery, state: FSMContext):
+    if callback.data == "by":
+        await callback.answer("Вы выбрали Беларусь")
+    else:
+        await callback.answer("Вы выбрали Россия")
     await state.update_data(country=callback.data)
     await state.set_state(City.name)
     await callback.message.answer("Введите город")
