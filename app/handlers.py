@@ -60,11 +60,3 @@ async def send_forecast(message: Message, state: FSMContext):
         await message.answer(get_weather(data["name"], data["country"]))
     else:
         await message.answer(get_weather_overview(data["name"], data["country"]))
-
-
-"""@router.message(City.name, F.text == "overview")
-async def set_city_name(message: Message, state: FSMContext):
-    await state.update_data(name=message.text)
-    data = await state.get_data()
-    await message.answer(get_weather_overview(data["name"], data["country"]))
-"""
