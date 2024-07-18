@@ -20,7 +20,7 @@ class City(StatesGroup):
 
 @router.message(CommandStart())
 async def start_command(message: types.Message):
-    await message.answer("Привет! это тестовый бот OpenWeatherMap ", reply_markup=kb.main)
+    await message.answer("Привет! это тестовый бот OpenWeatherMap.\n Что-бы узнать погоду, нажми кнопку узнать погоду.", reply_markup=kb.main)
 
 
 @router.message(F.text == "Узнать погоду")
@@ -61,5 +61,6 @@ async def send_forecast(message: Message, state: FSMContext):
             await message.answer(get_weather(data["name"], data["country"]))
         else:
             await message.answer(get_weather_overview(data["name"], data["country"]))
+        await message.answer("Посмотрим погоду еще где-нибудь ?", reply_markup=kb.main)
     except IndexError:
         await message.answer("Такой город не найден")
