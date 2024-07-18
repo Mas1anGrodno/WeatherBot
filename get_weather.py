@@ -1,49 +1,60 @@
 import requests, json
 from deep_translator import GoogleTranslator
 
+# Enter your API key here
+api_key = "3efb07367c44620fb67d99e607fca049"
 
-def get_weather(city_name):
-    # Enter your API key here
-    api_key = "3efb07367c44620fb67d99e607fca049"
 
-    # city_name = input("Enter city name : ")
+def get_weather(city_name, country_name):
 
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},BY&limit=1&appid={api_key}"
+    # тут получаем координаты по названию города                                               🠗🠗🠗 - limit=1 ограничивает количество совпадений названия города
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_name}&limit=1&appid={api_key}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
     lon = coord[0]["lon"]
-    city_name_from_json = coord[0]["name"]
 
-    base_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={api_key}"
-    overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={api_key}"
-
-    response = requests.get(base_url)
+    # получаем погоду по координатам
+    weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={api_key}"
+    response = requests.get(weather_request)
     x = response.json()
-    overview = requests.get(overview_url)
-    j = overview.json()
 
     y = x["current"]
     z = y["weather"]
 
+    city_name_from_json = coord[0]["name"]
+    weather_description = z[0]["description"]
     current_temperature = y["temp"]
     current_pressure = y["pressure"]
     current_humidity = y["humidity"]
-    weather_description = z[0]["description"]
+
+    # Пока отключили overview и вынесли в отдельную функцию.
+
+    # overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={api_key}"
+    # overview = requests.get(overview_url)
+    # j = overview.json()
+    # weather_overview = j["weather_overview"]
+    # translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
+
+    # return f" В {city_name_from_json} сейчас - {weather_description}\nТемпература воздуха - {current_temperature} °C\nДавление - {current_pressure} гПа\nВлажность - {current_humidity} % \n\n{translated}"
+    return f" В {city_name_from_json} сейчас - {weather_description}\nТемпература воздуха - {current_temperature} °C\nДавление - {current_pressure} гПа\nВлажность - {current_humidity} %"
+
+
+def get_weather_overview(city_name, country_name):
+
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_name}&limit=1&appid={api_key}"
+    get_coord = requests.get(coord_by_name)
+    coord = get_coord.json()
+    lat = coord[0]["lat"]
+    lon = coord[0]["lon"]
+
+    overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={api_key}"
+    overview = requests.get(overview_url)
+    j = overview.json()
+
     weather_overview = j["weather_overview"]
+    city_name_from_json = coord[0]["name"]
 
     translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
 
-    combine_response = print(f"Температура - {current_temperature}\nДавление - {current_pressure}\nВлажность - {current_humidity}\nСейчас - {weather_description}\n\n{translated}")
-
-    return
-
-
-"""print("Temperature (in celsius unit) = " + str(current_temperature))
-    print("Description = " + str(weather_description))
-    print("Humidity (in percentage) = " + str(current_humidity))
-    print("Atmospheric pressure (in hPa unit) = " + str(current_pressure))
-    print(weather_overview)
-"""
-
-get_weather("grodno")
+    return f" В {city_name_from_json} сейчас -\n{translated}"
