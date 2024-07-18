@@ -54,9 +54,12 @@ async def get_forecast(message: Message, state: FSMContext):
 
 @router.message(City.forecast)
 async def send_forecast(message: Message, state: FSMContext):
-    await state.update_data(forecast=message.text)
-    data = await state.get_data()
-    if data["forecast"] == "Краткий":
-        await message.answer(get_weather(data["name"], data["country"]))
-    else:
-        await message.answer(get_weather_overview(data["name"], data["country"]))
+    try:
+        await state.update_data(forecast=message.text)
+        data = await state.get_data()
+        if data["forecast"] == "Краткий":
+            await message.answer(get_weather(data["name"], data["country"]))
+        else:
+            await message.answer(get_weather_overview(data["name"], data["country"]))
+    except IndexError:
+        await message.answer("Такой город не найден")
