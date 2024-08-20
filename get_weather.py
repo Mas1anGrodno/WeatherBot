@@ -1,9 +1,6 @@
 import requests, json
 from deep_translator import GoogleTranslator
 
-# Enter your API key here
-api_key = "3efb07367c44620fb67d99e607fca049"
-
 
 def get_weather(city_name, country_name):
 
