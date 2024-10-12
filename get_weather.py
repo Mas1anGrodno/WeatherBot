@@ -47,8 +47,7 @@ def get_weather_overview(city_name, country_name):
     lat = coord[0]["lat"]
     lon = coord[0]["lon"]
 
-    overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={
-        lat}&lon={lon}&units=metric&lang=ru&appid={OW_API_KEY}"
+    overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={OW_API_KEY}"
     overview = requests.get(overview_url)
     j = overview.json()
 
