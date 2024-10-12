@@ -20,7 +20,7 @@ def get_weather(city_name, country_name):
 
     # получаем погоду по координатам
     weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={
-        lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={api_key}"
+        lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={env('OW_API_KEY')}"
     response = requests.get(weather_request)
     x = response.json()
 
@@ -39,14 +39,14 @@ def get_weather(city_name, country_name):
 def get_weather_overview(city_name, country_name):
 
     coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={
-        city_name},{country_name}&limit=1&appid={api_key}"
+        city_name},{country_name}&limit=1&appid={env('OW_API_KEY')}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
     lon = coord[0]["lon"]
 
     overview_url = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={
-        lat}&lon={lon}&units=metric&lang=ru&appid={api_key}"
+        lat}&lon={lon}&units=metric&lang=ru&appid={env('OW_API_KEY')}"
     overview = requests.get(overview_url)
     j = overview.json()
 
