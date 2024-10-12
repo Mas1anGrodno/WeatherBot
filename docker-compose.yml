@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  weather_bot:
+    build: .
+    env_file:
+      - env/.env.dev
+    volumes:
+      - .:/app
+    restart: always
