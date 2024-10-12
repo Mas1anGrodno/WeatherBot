@@ -8,24 +8,22 @@ import environ
 from pathlib import Path
 
 env = environ.Env()
-environ.Env.read_env(env_file=Path('./env/.env.dev'))
+environ.Env.read_env(env_file=Path("./env/.env.dev"))
 
-OW_API_KEY = env('OW_API_KEY')
+OW_API_KEY = env("OW_API_KEY")
 
 
 def get_weather(city_name, country_name):
 
     # тут получаем координаты по названию города                                               🠗🠗🠗 - limit=1 ограничивает количество совпадений названия города
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={
-        city_name},{country_name}&limit=1&appid={OW_API_KEY}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_name}&limit=1&appid={OW_API_KEY}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
     lon = coord[0]["lon"]
 
     # получаем погоду по координатам
-    weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={
-        lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={OW_API_KEY}"
+    weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=hourly,daily,minutely&units=metric&lang=ru&appid={OW_API_KEY}"
     response = requests.get(weather_request)
     x = response.json()
 
@@ -43,8 +41,7 @@ def get_weather(city_name, country_name):
 
 def get_weather_overview(city_name, country_name):
 
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={
-        city_name},{country_name}&limit=1&appid={OW_API_KEY}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_name}&limit=1&appid={OW_API_KEY}"
     get_coord = requests.get(coord_by_name)
     coord = get_coord.json()
     lat = coord[0]["lat"]
@@ -58,7 +55,6 @@ def get_weather_overview(city_name, country_name):
     weather_overview = j["weather_overview"]
     city_name_from_json = coord[0]["name"]
 
-    translated = GoogleTranslator(
-        source="en", target="ru").translate(weather_overview)
+    translated = GoogleTranslator(source="en", target="ru").translate(weather_overview)
 
     return f"{translated}"
