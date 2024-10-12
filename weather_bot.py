@@ -8,7 +8,7 @@ environ.Env.read_env(env_file=Path('./env/.env.dev'))
 
 
 async def main():
-    bot = Bot(token="****************************")
+    bot = Bot(token=env('BOT_SECRET_KEY'))
     dp = Dispatcher()
     dp.include_router(router)
     await dp.start_polling(bot)
