@@ -1,6 +1,5 @@
 # Используем официальный образ Python
-# FROM python:alpine
-FROM python:3.11-slim
+FROM python:alpine
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
