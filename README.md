@@ -1,6 +1,11 @@
-Hi ! To make bot working, you need to create env directory in main folder 
-and file named .dev.dev inside this folder.
-.env.dev must contain following entries
+Проект по созданию Telegram бота на Aiogram 3</br>
+для просмотра погоды в выбранном городе</br> 
+сиспользованием API от OpenWeather.</br> 
+
+To make bot working, you need to create /env/ directory in main folder</br> 
+and file named /.dev.dev inside this folder.</br>
+
+.env.dev must contain following entries</br>
 
 # Telegram Bot API Key
 BOT_SECRET_KEY=your_bot_secret_key
