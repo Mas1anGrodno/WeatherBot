@@ -17,25 +17,27 @@ class City(StatesGroup):
     lat = State()
     lon = State()
 
+
 @router.message(F.location)
 async def handle_location(message: types.Message):
-    print('function started')
+    print("function started")
     City.lat = message.location.latitude
     City.lon = message.location.longitude
     await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast_by_coord)
+
 
 @router.message(F.text.in_({"Коротко", "Развернуто"}))
 async def handle_forecast(message: types.Message):
     if message.text == "Коротко":
         await message.answer(get_weather_by_coord(City.lat, City.lon))
     elif message.text == "Развернуто":
-        await message.answer(get_weather_overview_by_coord(City.lat, City.lon))  
+        await message.answer(get_weather_overview_by_coord(City.lat, City.lon))
     await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
 
 @router.message(CommandStart())
 async def start_command(message: types.Message):
-    await message.answer("Привет! это бот OpenWeatherMap.\n Что-бы начать, нажми кнопку \"Узнать погоду\".", reply_markup=kb.main)
-
+    await message.answer('Привет! это бот OpenWeatherMap.\n Что-бы начать, нажми кнопку "Узнать погоду".', reply_markup=kb.main)
 
 
 @router.message(F.text == "Узнать погоду")
@@ -76,4 +78,3 @@ async def send_forecast(message: Message, state: FSMContext):
 
     except IndexError:
         await message.answer("Такой город не найден", reply_markup=kb.main)
-
