@@ -4,9 +4,6 @@ from pathlib import Path
 import environ
 from deep_translator import GoogleTranslator
 
-import environ
-from pathlib import Path
-
 env = environ.Env()
 environ.Env.read_env(env_file=Path("./env/.env.dev"))
 
@@ -29,6 +26,7 @@ def get_weather_by_coord(lat, lon):
     current_humidity = y["humidity"]
     print("get_weather_by_coord")
     return f" В вашей локации сейчас - {weather_description}\nТемпература воздуха - {current_temperature} °C\nДавление - {current_pressure} гПа\nВлажность - {current_humidity} %"
+
 
 def get_weather_overview_by_coord(lat, lon):
 
