@@ -5,7 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 import app.keyboards as kb
-from .get_weather import weather_now, weather_overview, weather_hourly
+from .get_weather import weather_now, weather_overview, weather_hourly, weather_three_days
 
 
 router = Router()
@@ -70,16 +70,20 @@ async def send_forecast(message: Message, state: FSMContext):
     try:
         await state.update_data(forecast=message.text)
         data = await state.get_data()
-        if data["forecast"] == "Краткий":
+        if data["forecast"] == "Сегодня":
             await message.answer(weather_now(data["city_name"], data["country_name"]))
-            await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
-
-        elif data["forecast"] == "Развернутый":
-            await message.answer(weather_overview(data["city_name"], data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
         elif data["forecast"] == "На ближайшее время":
             await message.answer(weather_hourly(data["city_name"], data["country_name"]))
+            await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
+        elif data["forecast"] == "Описание":
+            await message.answer(weather_overview(data["city_name"], data["country_name"]))
+            await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
+        elif data["forecast"] == "На три дня":
+            await message.answer(weather_three_days(data["city_name"], data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
     except IndexError:

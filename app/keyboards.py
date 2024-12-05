@@ -16,9 +16,10 @@ chose_country = InlineKeyboardMarkup(
 
 
 chose_forecast = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="Краткий")],
-              [KeyboardButton(text="Развернутый")],
-              [KeyboardButton(text="На ближайшее время")]],
+    keyboard=[[KeyboardButton(text="Сегодня")],
+              [KeyboardButton(text="На ближайшее время")],
+              [KeyboardButton(text="Описание")],
+              [KeyboardButton(text="На три дня")]],
     resize_keyboard=True
 )
 
