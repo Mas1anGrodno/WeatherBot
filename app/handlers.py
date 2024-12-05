@@ -5,7 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 import app.keyboards as kb
-from .get_weather import *
+from .get_weather import weather_now, weather_overview, weather_hourly
 
 
 router = Router()
@@ -78,8 +78,8 @@ async def send_forecast(message: Message, state: FSMContext):
             await message.answer(weather_overview(data["city_name"], data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
-        elif data["forecast"] == "На день":
-            await message.answer(weather_now_plus_three_hours(data["city_name"], data["country_name"]))
+        elif data["forecast"] == "На ближайшее время":
+            await message.answer(weather_hourly(data["city_name"], data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
     except IndexError:

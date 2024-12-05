@@ -10,7 +10,8 @@ OW_API_KEY = env("OW_API_KEY")
 
 
 def get_city_coord(city_name: str, country_name: str) -> Tuple[float, float]:
-    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_name}&limit=1&appid={OW_API_KEY}"
+    coord_by_name = f"http://api.openweathermap.org/geo/1.0/direct?q={
+        city_name},{country_name}&limit=1&appid={OW_API_KEY}"
     try:
         get_coord = requests.get(coord_by_name)
         get_coord.raise_for_status()  # Проверка, что запрос выполнен успешно
@@ -25,7 +26,9 @@ def get_city_coord(city_name: str, country_name: str) -> Tuple[float, float]:
 
 def weather_request(coords: Tuple[float, float]) -> dict:
     lat, lon = coords
-    weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=minutely&units=metric&lang=ru&appid={OW_API_KEY}"
+    weather_request = f"https://api.openweathermap.org/data/3.0/onecall?lat={
+        lat}&lon={lon}&exclude=minutely&units=metric&lang=ru&appid={OW_API_KEY}"
+
     try:
         r = requests.get(weather_request)
         r.raise_for_status()  # Проверка, что запрос выполнен успешно
@@ -40,7 +43,9 @@ def weather_request(coords: Tuple[float, float]) -> dict:
 
 def weather_request_overview(coords: Tuple[float, float]) -> dict:
     lat, lon = coords
-    weather_request_overview = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={lat}&lon={lon}&units=metric&lang=ru&appid={OW_API_KEY}"
+    weather_request_overview = f"https://api.openweathermap.org/data/3.0/onecall/overview?lat={
+        lat}&lon={lon}&units=metric&lang=ru&appid={OW_API_KEY}"
+
     try:
         r = requests.get(weather_request_overview)
         r.raise_for_status()  # Проверка, что запрос выполнен успешно
