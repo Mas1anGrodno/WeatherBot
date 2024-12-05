@@ -30,10 +30,10 @@ def weather_now(city_name: str, country_name: str) -> dict:
         weather_description = weather_data["current"]["weather"][0]["description"]
 
         sunrise = convert_unix_timestamp_to_hours(
-            weather_data["daily"][i]["sunrise"], weather_data["timezone_offset"]
+            weather_data["daily"][0]["sunrise"], weather_data["timezone_offset"]
         )
         sunset = convert_unix_timestamp_to_hours(
-            weather_data["daily"][i]["sunset"], weather_data["timezone_offset"]
+            weather_data["daily"][0]["sunset"], weather_data["timezone_offset"]
         )
         current_temp = round(weather_data["current"]["temp"])
         feels_like_temp = round(weather_data["current"]["feels_like"])
@@ -131,7 +131,7 @@ def weather_three_days(city_name: str, country_name: str) -> str:
 
         print("Данные получены")
 
-        for i in range(1, 3):
+        for i in range(1, 4):
             current_time = convert_unix_timestamp_to_days(
                 weather_data["daily"][i]["dt"], weather_data["timezone_offset"]
             )
@@ -163,13 +163,11 @@ def weather_three_days(city_name: str, country_name: str) -> str:
             # icon_url = f"https://openweathermap.org/img/wn/{icon}@2x.png"
 
             forecast.append(f"""
-                📅 {current_time}
-
-                ⛅️ {summary}
+                📅 {current_time} - {summary}
                 🌅 Восход:{sunrise}
                 🌄 Закат:{sunset}
                 🌡 Днем от {temp_min} до {temp_max} °C
-                ощущается как
+                Ощущается как
                 Утром: {temp_feels_morn} °C
                 Днем: {temp_feels_day} °C
                 Вечером: {temp_feels_eve} °C
