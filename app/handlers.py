@@ -5,14 +5,15 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 import app.keyboards as kb
-from get_weather import get_weather, get_weather_overview, get_weather_by_coord, get_weather_overview_by_coord
+from .get_weather import weather_now, weather_overview, weather_hourly, weather_three_days
+
 
 router = Router()
 
 
 class City(StatesGroup):
-    name = State()
-    country = State()
+    city_name = State()
+    country_name = State()
     forecast = State()
     lat = State()
     lon = State()
@@ -20,18 +21,21 @@ class City(StatesGroup):
 
 @router.message(F.location)
 async def handle_location(message: types.Message):
-    print("function started")
     City.lat = message.location.latitude
     City.lon = message.location.longitude
-    await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast_by_coord)
+    await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast)
 
 
-@router.message(F.text.in_({"Коротко", "Развернуто"}))
+@router.message(F.text.in_({"Сегодня", "На ближайшее время", "Описание", "На три дня"}))
 async def handle_forecast(message: types.Message):
-    if message.text == "Коротко":
-        await message.answer(get_weather_by_coord(City.lat, City.lon))
-    elif message.text == "Развернуто":
-        await message.answer(get_weather_overview_by_coord(City.lat, City.lon))
+    if message.text == "Сегодня":
+        await message.answer(weather_now(lat=City.lat, lon=City.lon))
+    elif message.text == "На ближайшее время":
+        await message.answer(weather_hourly(lat=City.lat, lon=City.lon))
+    elif message.text == "Описание":
+        await message.answer(weather_overview(lat=City.lat, lon=City.lon))
+    elif message.text == "На три дня":
+        await message.answer(weather_three_days(lat=City.lat, lon=City.lon))
     await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
 
@@ -42,24 +46,24 @@ async def start_command(message: types.Message):
 
 @router.message(F.text == "Узнать погоду")
 async def get_country(message: Message, state: FSMContext):
-    await state.set_state(City.country)
+    await state.set_state(City.country_name)
     await message.answer("Выбери страну", reply_markup=kb.chose_country)
 
 
-@router.callback_query(City.country)
+@router.callback_query(City.country_name)
 async def set_country(callback: CallbackQuery, state: FSMContext):
     if callback.data == "by":
         await callback.answer("Вы выбрали Беларусь")
     else:
         await callback.answer("Вы выбрали Россия")
-    await state.update_data(country=callback.data)
-    await state.set_state(City.name)
+    await state.update_data(country_name=callback.data)
+    await state.set_state(City.city_name)
     await callback.message.answer("Введите город")
 
 
-@router.message(City.name)
+@router.message(City.city_name)
 async def get_forecast(message: Message, state: FSMContext):
-    await state.update_data(name=message.text)
+    await state.update_data(city_name=message.text)
     await state.set_state(City.forecast)
     await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast)
 
@@ -69,11 +73,20 @@ async def send_forecast(message: Message, state: FSMContext):
     try:
         await state.update_data(forecast=message.text)
         data = await state.get_data()
-        if data["forecast"] == "Краткий":
-            await message.answer(get_weather(data["name"], data["country"]))
+        if data["forecast"] == "Сегодня":
+            await message.answer(weather_now(city_name=data["city_name"], country_name=data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
-        else:
-            await message.answer(get_weather_overview(data["name"], data["country"]))
+
+        elif data["forecast"] == "На ближайшее время":
+            await message.answer(weather_hourly(city_name=data["city_name"], country_name=data["country_name"]))
+            await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
+        elif data["forecast"] == "Описание":
+            await message.answer(weather_overview(city_name=data["city_name"], country_name=data["country_name"]))
+            await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
+        elif data["forecast"] == "На три дня":
+            await message.answer(weather_three_days(city_name=data["city_name"], country_name=data["country_name"]))
             await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
 
     except IndexError:
