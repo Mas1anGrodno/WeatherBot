@@ -47,7 +47,9 @@ def weather_now(city_name: str = None, country_name: str = None, lat: float = No
             weather_alerts_end = convert_unix_timestamp_to_hours(weather_data["alerts"][0]["end"], weather_data["timezone_offset"])
             weather_alerts = GoogleTranslator(source="en", target="ru").translate(weather_data["alerts"][0]["event"])
         else:
-            weather_alerts_start = "Данные Предупреждений отсутствуют"
+            weather_alerts_start = None
+            weather_alerts_end = None
+            weather_alerts = "Не получены данные о Предупреждениях"
 
         return f"""
 📅 Сейчас: {current_time}
