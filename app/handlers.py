@@ -7,7 +7,6 @@ from aiogram.fsm.context import FSMContext
 import app.keyboards as kb
 from .get_weather import weather_now, weather_overview, weather_hourly, weather_three_days
 
-
 router = Router()
 
 
@@ -41,6 +40,11 @@ async def handle_forecast(message: types.Message, state: FSMContext):
         if "lat" in data and "lon" in data:
             await message.answer(weather_three_days(lat=data["lat"], lon=data["lon"]))
     await message.answer("Посмторим погоду еще где-нибудь ?", reply_markup=kb.main)
+
+
+@router.message(CommandStart())
+async def start_command(message: types.Message):
+    await message.answer('Привет! это бот OpenWeatherMap.\n Что-бы начать, нажми кнопку "Узнать погоду".', reply_markup=kb.main)
 
 
 @router.message(F.text == "Узнать погоду")
@@ -86,13 +90,33 @@ async def send_forecast(message: Message, state: FSMContext):
         await message.answer("Такой город не найден", reply_markup=kb.main)
 
 
-# -------------------------------OLD-------------------------------------------------
+# from aiogram import F, Router, types
+# from aiogram.types import Message, CallbackQuery, Location
+# from aiogram.filters import CommandStart, Command
+# from aiogram.fsm.state import State, StatesGroup
+# from aiogram.fsm.context import FSMContext
+
+# import app.keyboards as kb
+# from .get_weather import weather_now, weather_overview, weather_hourly, weather_three_days
+
+
+# router = Router()
+
+
+# class City(StatesGroup):
+#     city_name = State()
+#     country_name = State()
+#     forecast = State()
+#     lat = State()
+#     lon = State()
+
 
 # @router.message(F.location)
 # async def handle_location(message: types.Message):
 #     City.lat = message.location.latitude
 #     City.lon = message.location.longitude
 #     await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast)
+
 
 # @router.message(F.text.in_({"Сегодня", "На ближайшее время", "Описание", "На три дня"}))
 # async def handle_forecast(message: types.Message):
