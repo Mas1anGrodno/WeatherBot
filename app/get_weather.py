@@ -51,18 +51,22 @@ def weather_now(city_name: str = None, country_name: str = None, lat: float = No
             weather_alerts_end = None
             weather_alerts = "Не получены данные о Предупреждениях"
 
+        alerts_info = ""
+        if weather_alerts_start and weather_alerts_end:
+            alerts_info = f"⚠️ C {weather_alerts_start} до {weather_alerts_end} возможны(ен): {weather_alerts}"
+
         return f"""
 📅 Сейчас: {current_time}
 
-🌅 Восход:{sunrise}
-🌄 Закат:{sunset}
+🌅 Восход: {sunrise}
+🌄 Закат: {sunset}
 
 🌆 В выбранной локации сейчас: {weather_description}
 
 🌡 Температура воздуха: {current_temp} °C
 🤗 Ощущается как: {feels_like_temp} °C
 🌡 Днем от {temp_min} до {temp_max} °C
-ощущается как
+  ощущается как
     Утром: {temp_feels_morn} °C
     Днем: {temp_feels_day} °C
     Вечером: {temp_feels_eve} °C
@@ -70,7 +74,7 @@ def weather_now(city_name: str = None, country_name: str = None, lat: float = No
 🌬 Давление: {pressure} гПа
 💧 Влажность: {humidity} %
 
-⚠️ C {weather_alerts_start} до {weather_alerts_end} возможны(ен): {weather_alerts}
+{alerts_info}
 """
 
     except (requests.RequestException, ValueError) as e:
