@@ -42,10 +42,12 @@ def weather_now(city_name: str = None, country_name: str = None, lat: float = No
         pressure = weather_data["daily"][0]["pressure"]
         humidity = weather_data["daily"][0]["humidity"]
 
-        weather_alerts_start = convert_unix_timestamp_to_hours(weather_data["alerts"][0]["start"], weather_data["timezone_offset"])
-        weather_alerts_end = convert_unix_timestamp_to_hours(weather_data["alerts"][0]["end"], weather_data["timezone_offset"])
-
-        weather_alerts = GoogleTranslator(source="en", target="ru").translate(weather_data["alerts"][0]["event"])
+        if weather_data["alerts"][0]["start"] in weather_data:
+            weather_alerts_start = convert_unix_timestamp_to_hours(weather_data["alerts"][0]["start"], weather_data["timezone_offset"])
+            weather_alerts_end = convert_unix_timestamp_to_hours(weather_data["alerts"][0]["end"], weather_data["timezone_offset"])
+            weather_alerts = GoogleTranslator(source="en", target="ru").translate(weather_data["alerts"][0]["event"])
+        else:
+            weather_alerts_start = "Данные Предупреждений отсутствуют"
 
         return f"""
 📅 Сейчас: {current_time}
