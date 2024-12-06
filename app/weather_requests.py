@@ -58,29 +58,40 @@ def weather_request_overview(coords: Tuple[float, float]) -> dict:
         return {}
 
 
-def get_weather_forecast(city_name: str, country_name: str) -> dict:
-    # Сначала получаем координаты города
-    coords = get_city_coord(city_name, country_name)
-
-    # Проверяем, что координаты получены успешно
-    if coords == (None, None):
-        print("Ошибка: не удалось получить координаты города.")
+def get_weather_forecast(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> dict:
+    # Проверяем, указаны ли координаты
+    if lat is not None and lon is not None:
+        coords = (lat, lon)
+    elif city_name is not None and country_name is not None:
+        # Получаем координаты города, если координаты не указаны
+        coords = get_city_coord(city_name, country_name)
+        if coords == (None, None):
+            print("Ошибка: не удалось получить координаты города.")
+            return {}
+    else:
+        print(
+            "Ошибка: необходимо указать либо координаты, либо название города и код страны.")
         return {}
 
-    # Затем получаем данные прогноза погоды по координатам
+    # Получаем данные прогноза погоды по координатам
     weather_data = weather_request(coords)
 
     return weather_data
 
 
-def get_weather_forecast_overview(city_name: str, country_name: str) -> dict:
+def get_weather_forecast_overview(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> dict:
     # Сначала получаем координаты города
     coords = get_city_coord(city_name, country_name)
 
-    # Проверяем, что координаты получены успешно
-    if coords == (None, None):
-        print("Ошибка: не удалось получить координаты города.")
-        return {}
+    # Проверяем, указаны ли координаты
+    if lat is not None and lon is not None:
+        coords = (lat, lon)
+    elif city_name is not None and country_name is not None:
+        # Получаем координаты города, если координаты не указаны
+        coords = get_city_coord(city_name, country_name)
+        if coords == (None, None):
+            print("Ошибка: не удалось получить координаты города.")
+            return {}
 
     # Затем получаем данные прогноза погоды по координатам
     weather_data = weather_request_overview(coords)

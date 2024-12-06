@@ -4,7 +4,6 @@ from deep_translator import GoogleTranslator
 from datetime import datetime, timezone
 
 from .weather_requests import get_weather_forecast, get_weather_forecast_overview
-# from weather_requests import get_weather_forecast, get_weather_forecast_overview
 
 
 def convert_unix_timestamp_to_hours(unix_timestamp: int, time_offset: int) -> str:
@@ -17,9 +16,9 @@ def convert_unix_timestamp_to_days(unix_timestamp: int, time_offset: int) -> str
     return datetime.fromtimestamp(unix_timestamp, tz=timezone.utc).strftime("%d-%m-%Y")
 
 
-def weather_now(city_name: str, country_name: str) -> dict:
+def weather_now(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> str:
     try:
-        weather_data = get_weather_forecast(city_name, country_name)
+        weather_data = get_weather_forecast(city_name, country_name, lat, lon)
         if not weather_data:
             raise ValueError("Данные не получены")
 
@@ -92,13 +91,18 @@ def weather_now(city_name: str, country_name: str) -> dict:
         return f"Ошибка: {e}"
 
 
-# print(weather_now("grodno", "by"))
+# Вызов с названием города и кодом страны
+# print(weather_now(city_name="Grodno", country_name="BY"))
 
 
-def weather_hourly(city_name: str, country_name: str) -> str:
+# Вызов с координатами
+# print(weather_now(lat=53.6884, lon=23.8258))
+
+
+def weather_hourly(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> str:
     forecast = []
     try:
-        weather_data = get_weather_forecast(city_name, country_name)
+        weather_data = get_weather_forecast(city_name, country_name, lat, lon)
         if not weather_data:
             raise ValueError("Данные не получены")
 
@@ -111,7 +115,8 @@ def weather_hourly(city_name: str, country_name: str) -> str:
             temp = round(weather_data["hourly"][i]["temp"])
             weather_description = weather_data["hourly"][i]["weather"][0]["description"]
             forecast.append(
-                f"🕑: {time} 🌡 : {temp} 🌥 : {weather_description}")
+                f"🕑: {time} 🌡 : {temp} 🌥 : {weather_description}"
+            )
 
         return "\n".join(forecast)
 
@@ -119,13 +124,17 @@ def weather_hourly(city_name: str, country_name: str) -> str:
         return f"Ошибка: {e}"
 
 
-# print(get_hourly_weather_forecast("grodno", "by"))
+# Вызов с названием города и кодом страны
+# print(weather_hourly(city_name="Grodno", country_name="BY"))
+
+# Вызов с координатами
+# print(weather_hourly(lat=53.6884, lon=23.8258))
 
 
-def weather_three_days(city_name: str, country_name: str) -> str:
+def weather_three_days(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> str:
     forecast = []
     try:
-        weather_data = get_weather_forecast(city_name, country_name)
+        weather_data = get_weather_forecast(city_name, country_name, lat, lon)
         if not weather_data:
             raise ValueError("Данные не получены")
 
@@ -181,13 +190,17 @@ def weather_three_days(city_name: str, country_name: str) -> str:
         return f"Ошибка: {e}"
 
 
-# print(weather_today("grodno", "by"))
+# Вызов с названием города и кодом страны
+# print(weather_three_days(city_name="Grodno", country_name="BY"))
+
+# Вызов с координатами
+# print(weather_three_days(lat=53.6884, lon=23.8258))
 
 
-def weather_overview(city_name: str, country_name: str) -> dict:
+def weather_overview(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> str:
     try:
         weather_data_overview = get_weather_forecast_overview(
-            city_name, country_name)
+            city_name, country_name, lat, lon)
         if not weather_data_overview:
             raise ValueError("Данные описания погодных условий не получены")
 
@@ -199,4 +212,8 @@ def weather_overview(city_name: str, country_name: str) -> dict:
         return f"Ошибка: {e}"
 
 
-# print(weather_overview("grodno", "by"))
+# Вызов с названием города и кодом страны
+# print(weather_overview(city_name="Grodno", country_name="BY"))
+
+# Вызов с координатами
+# print(weather_overview(lat=53.6884, lon=23.8258))

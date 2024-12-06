@@ -22,6 +22,3 @@ chose_forecast = ReplyKeyboardMarkup(
               [KeyboardButton(text="На три дня")]],
     resize_keyboard=True
 )
-
-# chose_forecast_by_coord = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Коротко")],
-#                                                [KeyboardButton(text="Развернуто")]], resize_keyboard=True)
