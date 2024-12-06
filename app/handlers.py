@@ -18,11 +18,12 @@ class City(StatesGroup):
     lon = State()
 
 
+
+
 @router.message(F.location)
 async def handle_location(message: types.Message, state: FSMContext):
     await state.update_data(lat=message.location.latitude, lon=message.location.longitude)
     await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast)
-
 
 @router.message(F.text.in_({"Сегодня", "На ближайшее время", "Описание", "На три дня"}))
 async def handle_forecast(message: types.Message, state: FSMContext):
@@ -53,7 +54,6 @@ async def get_country(message: Message, state: FSMContext):
     await state.set_state(City.country_name)
     await message.answer("Выбери страну", reply_markup=kb.chose_country)
 
-
 @router.callback_query(City.country_name)
 async def set_country(callback: CallbackQuery, state: FSMContext):
     await state.update_data(country_name=callback.data, lat=None, lon=None)  # Очистка координат
@@ -64,13 +64,11 @@ async def set_country(callback: CallbackQuery, state: FSMContext):
     await state.set_state(City.city_name)
     await callback.message.answer("Введите город")
 
-
 @router.message(City.city_name)
 async def get_forecast(message: Message, state: FSMContext):
     await state.update_data(city_name=message.text)
     await state.set_state(City.forecast)
     await message.answer("Выбери прогноз", reply_markup=kb.chose_forecast)
-
 
 @router.message(City.forecast)
 async def send_forecast(message: Message, state: FSMContext):
@@ -89,6 +87,7 @@ async def send_forecast(message: Message, state: FSMContext):
     except IndexError:
         await message.answer("Такой город не найден", reply_markup=kb.main)
 
+<<<<<<< HEAD
 
 # from aiogram import F, Router, types
 # from aiogram.types import Message, CallbackQuery, Location
@@ -110,6 +109,9 @@ async def send_forecast(message: Message, state: FSMContext):
 #     lat = State()
 #     lon = State()
 
+=======
+-------------------------------OLD-------------------------------------------------
+>>>>>>> parent of 509af97 (fix comment)
 
 # @router.message(F.location)
 # async def handle_location(message: types.Message):
