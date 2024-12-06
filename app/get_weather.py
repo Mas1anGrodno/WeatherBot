@@ -17,12 +17,12 @@ def convert_unix_timestamp_to_days(unix_timestamp: int, time_offset: int) -> str
 
 
 def weather_now(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> str:
+    print(city_name, country_name)
     try:
         weather_data = get_weather_forecast(city_name, country_name, lat, lon)
         if not weather_data:
             raise ValueError("Данные не получены")
 
-        print("Данные получены")
         current_time = convert_unix_timestamp_to_hours(weather_data["current"]["dt"], weather_data["timezone_offset"])
         weather_description = weather_data["current"]["weather"][0]["description"]
 
@@ -49,9 +49,10 @@ def weather_now(city_name: str = None, country_name: str = None, lat: float = No
         else:
             weather_alerts_start = None
             weather_alerts_end = None
-            weather_alerts = "Не получены данные о Предупреждениях"
+            weather_alerts = None
 
         alerts_info = ""
+
         if weather_alerts_start and weather_alerts_end:
             alerts_info = f"⚠️ C {weather_alerts_start} до {weather_alerts_end} возможны(ен): {weather_alerts}"
 
@@ -96,8 +97,6 @@ def weather_hourly(city_name: str = None, country_name: str = None, lat: float =
         if not weather_data:
             raise ValueError("Данные не получены")
 
-        print("Данные получены")
-
         for i in range(1, 10, 2):
             time = convert_unix_timestamp_to_hours(weather_data["hourly"][i]["dt"], weather_data["timezone_offset"])
             temp = round(weather_data["hourly"][i]["temp"])
@@ -123,8 +122,6 @@ def weather_three_days(city_name: str = None, country_name: str = None, lat: flo
         weather_data = get_weather_forecast(city_name, country_name, lat, lon)
         if not weather_data:
             raise ValueError("Данные не получены")
-
-        print("Данные получены")
 
         for i in range(1, 4):
             current_time = convert_unix_timestamp_to_days(weather_data["daily"][i]["dt"], weather_data["timezone_offset"])

@@ -65,14 +65,18 @@ def get_weather_forecast(city_name: str = None, country_name: str = None, lat: f
         if coords == (None, None):
             print("Ошибка: не удалось получить координаты города.")
             return {}
+        # print(f"Координаты получены: {coords}")  # Отладочный вывод
     else:
         print("Ошибка: необходимо указать либо координаты, либо название города и код страны.")
         return {}
 
     # Получаем данные прогноза погоды по координатам
     weather_data = weather_request(coords)
-
-    return weather_data
+    if weather_data:
+        return weather_data
+    else:
+        print("Данные о погоде не получены или пустые")
+        return {}
 
 
 def get_weather_forecast_overview(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> dict:
@@ -88,5 +92,8 @@ def get_weather_forecast_overview(city_name: str = None, country_name: str = Non
 
     # Затем получаем данные прогноза погоды по координатам
     weather_data = weather_request_overview(coords)
-
-    return weather_data
+    if weather_data:
+        return weather_data
+    else:
+        print("Данные о погоде не получены или пустые")
+        return {}
