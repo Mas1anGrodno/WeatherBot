@@ -76,9 +76,6 @@ def get_weather_forecast(city_name: str = None, country_name: str = None, lat: f
 
 
 def get_weather_forecast_overview(city_name: str = None, country_name: str = None, lat: float = None, lon: float = None) -> dict:
-    # Сначала получаем координаты города
-    coords = get_city_coord(city_name, country_name)
-
     # Проверяем, указаны ли координаты
     if lat is not None and lon is not None:
         coords = (lat, lon)
